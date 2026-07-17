@@ -6,7 +6,6 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com)
 [![Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-black?style=flat-square)](https://ollama.com)
 [![FAISS](https://img.shields.io/badge/FAISS-Vector%20Search-blueviolet?style=flat-square)](https://github.com/facebookresearch/faiss)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
 ---
 
@@ -393,13 +392,6 @@ data/
 To **fully delete** a document and all its data, use the `DELETE /api/v1/documents/{id}` endpoint — or simply delete the folder.
 
 ---
-
-## 📜 License
-
-MIT — do whatever you want with it.
-
----
-
 <div align="center">
   <sub>Built with FastAPI · Ollama · FAISS · PyMuPDF · sentence-transformers</sub>
 </div>
