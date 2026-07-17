@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto flex gap-6" style="height: calc(100vh - 120px);">
+
+    <!-- Sidebar: History -->
+    <div class="w-72 flex-shrink-0 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
+        <div class="px-4 py-3 bg-brand-purple text-white">
+            <h3 class="font-semibold text-sm">Chat History</h3>
+            <p class="text-xs text-purple-200 mt-0.5 truncate" title="{{ document.filename }}">{{ document.filename }}</p>
+        </div>
+        <div id="historyList" class="flex-grow overflow-y-auto p-3 space-y-1 text-sm text-gray-600">
+            <p class="text-gray-400 text-xs text-center mt-4">Your past questions will appear here.</p>
+        </div>
+        <div class="p-3 border-t border-gray-100 text-xs text-gray-400 space-y-1">
+            {% if document.page_count %}
+            <div>📄 {{ document.page_count }} pages</div>
+            {% endif %}
+            {% if document.chunk_count %}
+            <div>🧩 {{ document.chunk_count }} chunks indexed</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="flex-grow flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+
+        <!-- Header -->
+        <div class="bg-gray-50 border-b border-gray-100 px-6 py-4 flex justify-between items-center flex-shrink-0">
+            <div>
+                <h2 class="text-base font-semibold text-gray-800 truncate max-w-md" title="{{ document.filename }}">{{ document.filename }}</h2>
+                <p class="text-xs text-gray-400">Ask anything — answers cite exact page numbers</p>
+            </div>
+            <a href="/" class="text-sm text-brand-purple hover:text-brand-purple-dark hover:underline flex-shrink-0">← Dashboard</a>
+        </div>
+
+        <!-- Messages -->
+        <div id="chatMessages" class="flex-grow overflow-y-auto p-6 space-y-5 bg-gray-50/40">
+            <div class="flex items-start gap-3">
+                <div class="flex-shrink-0 bg-brand-purple text-white w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow">AI</div>
+                <div class="bg-white border border-gray-100 rounded-2xl rounded-tl-none px-5 py-3 shadow-sm text-gray-700 max-w-[85%] text-sm leading-relaxed">
+                    Hello! I'm ready to answer questions about <strong>{{ document.filename }}</strong>.<br>
+                    Every answer will cite the exact page numbers from the document.
+                </div>
+            </div>
+        </div>
+
+        <!-- Input -->
+        <div class="border-t border-gray-100 px-4 py-3 bg-white flex-shrink-0">
+            <form id="chatForm" class="flex items-end gap-3">
+                <div class="flex-grow">
+                    <textarea id="questionInput" rows="2"
+                        class="w-full resize-none rounded-xl border border-gray-200 focus:border-brand-purple focus:ring-1 focus:ring-brand-purple p-3 outline-none transition text-sm leading-snug"
+                        placeholder="Ask a question about this document… (Enter to send, Shift+Enter for new line)"></textarea>
+                </div>
+                <button type="submit" id="sendBtn"
+                    class="bg-brand-purple text-white h-12 w-12 rounded-xl shadow flex items-center justify-center hover:bg-brand-purple-dark transition focus:outline-none flex-shrink-0">
+                    <svg class="h-5 w-5 rotate-90" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Templates -->
+<template id="userMsgTpl">
+    <div class="flex items-start gap-3 justify-end">
+        <div class="bg-brand-purple text-white rounded-2xl rounded-tr-none px-4 py-2.5 shadow-sm text-sm max-w-[80%] msg-text"></div>
+        <div class="flex-shrink-0 bg-gray-200 text-gray-600 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold">U</div>
+    </div>
+</template>
+
+<template id="aiMsgTpl">
+    <div class="flex items-start gap-3">
+        <div class="flex-shrink-0 bg-brand-purple text-white w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow">AI</div>
+        <div class="max-w-[85%] space-y-2">
+            <div class="bg-white border border-gray-100 rounded-2xl rounded-tl-none px-5 py-3 shadow-sm text-gray-700 text-sm leading-relaxed msg-text"></div>
+            <div class="flex flex-wrap gap-2 text-xs msg-meta"></div>
+        </div>
+    </div>
+</template>
+
+<template id="loadingTpl">
+    <div class="flex items-start gap-3" id="loadingIndicator">
+        <div class="flex-shrink-0 bg-brand-purple text-white w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow">AI</div>
+        <div class="bg-white border border-gray-100 rounded-2xl rounded-tl-none px-5 py-3 shadow-sm flex gap-1.5 items-center">
+            <span class="w-2 h-2 bg-brand-purple rounded-full animate-bounce" style="animation-delay:0s"></span>
+            <span class="w-2 h-2 bg-brand-purple rounded-full animate-bounce" style="animation-delay:.15s"></span>
+            <span class="w-2 h-2 bg-brand-purple rounded-full animate-bounce" style="animation-delay:.3s"></span>
+        </div>
+    </div>
+</template>
+
+<script>window.DOC_ID = "{{ document.id }}";</script>
+<script src="/static/js/chat.js"></script>
+{% endblock %}
